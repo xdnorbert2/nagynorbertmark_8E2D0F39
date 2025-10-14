@@ -1,4 +1,4 @@
-> *Az ékezetek AI alapúak (Angol billentyűzet)*
+> *Az ékezetek AI alapúak (Angol billentyűzettel rendelkezem)*
 
 ---
 
