@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Névnap Naptár - CleanCarpet Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+        }
+
+        .calendar-card {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .day-card {
+            transition: all 0.2s ease;
+        }
+
+        .day-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #f5576c;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .search-result {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+      
+    <nav class="bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-2xl font-bold text-blue-900">CleanCarpet Pro</a>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="nav-link text-gray-700 hover:text-blue-900 font-medium">Főoldal</a>
+                    <a href="arkalkulator.html" class="nav-link text-gray-700 hover:text-blue-900 font-medium">Árkalkulátor</a>
+                    <a href="nevnap.html" class="nav-link text-pink-600 font-bold">Névnap Naptár</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="index.html" class="block px-3 py-2 text-gray-700 hover:text-blue-900">Főoldal</a>
+                <a href="arkalkulator.html" class="block px-3 py-2 text-gray-700 hover:text-blue-900">Árkalkulátor</a>
+                <a href="nevnap.html" class="block px-3 py-2 text-pink-600 font-bold">Névnap Naptár</a>
+            </div>
+        </div>
+    </nav>
+
+      
+    <div class="max-w-6xl mx-auto px-4 py-12">
+        <div class="calendar-card bg-white rounded-2xl shadow-2xl p-8 md:p-12">
+            <h1 class="text-3xl md:text-4xl font-bold text-center mb-3 text-gray-900">📅 Névnap Naptár</h1>
+            <p class="text-center text-gray-600 mb-8">Keresse meg, mikor van a névnapja!</p>
+
+              
+            <div class="mb-8">
+                <div class="flex gap-3">
+                    <input 
+                        type="text" 
+                        id="nev-input" 
+                        placeholder="Írja be a nevet (pl: János)"
+                        class="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-pink-500 focus:outline-none text-lg"
+                    >
+                    <button 
+                        onclick="keresNev()"
+                        class="bg-gradient-to-r from-pink-500 to-red-500 text-white px-8 py-3 rounded-lg font-bold hover:from-pink-600 hover:to-red-600 transition shadow-lg">
+                        Keresés
+                    </button>
+                </div>
+                <div id="kereses-eredmeny" class="mt-4"></div>
+            </div>
+
+             Hónap navigáció 
+            <div class="flex items-center justify-between mb-6">
+                <button 
+                    onclick="elozoHonap()"
+                    class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-semibold transition">
+                    ← Előző
+                </button>
+                <h2 id="honap-cim" class="text-2xl font-bold text-gray-900"></h2>
+                <button 
+                    onclick="kovetkezoHonap()"
+                    class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-semibold transition">
+                    Következő →
+                </button>
+            </div>
+
+              
+            <div id="nevnap-lista" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                 Dinamikusan töltődik 
+            </div>
+
+              
+            <div class="mt-8 bg-gradient-to-r from-pink-50 to-red-50 border-2 border-pink-300 rounded-lg p-6">
+                <h3 class="text-xl font-bold mb-2 text-gray-900">🎉 Ma van a névnapja:</h3>
+                <p id="mai-nevnap" class="text-2xl font-bold text-pink-600"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        
+        const nevnapok = [
+            
+            ['Fruzsina', 'Ábel', 'Genovéva, Benjámin', 'Titusz, Leona', 'Simon', 'Boldizsár', 'Attila, Ramóna', 'Gyöngyvér', 'Marcell', 'Melánia', 'Ágota', 'Ernő', 'Veronika', 'Bódog', 'Lóránt, Lóránd', 'Gusztáv', 'Antal, Antónia', 'Piroska', 'Sára, Márió', 'Fábián, Sebestyén', 'Ágnes', 'Vince, Artúr', 'Zelma, Rajmund', 'Timea', 'Pál', 'Paula, Vanda', 'Angelika', 'Károly, Karola', 'Adél', 'Martina, Gerda', 'Marcella'],
+            
+            ['Ignác', 'Karolina, Aida', 'Balázs', 'Ráhel, Csenge', 'Ágota, Ingrid', 'Dóra, Dorottya', 'Tódor, Rómeó', 'Aranka', 'Abigél, Alex', 'Elvira', 'Bertold, Marietta', 'Lívia, Lídia', 'Ella, Linda', 'Bálint, Valentin', 'Kolos, Georgina', 'Julianna, Lilla', 'Donát', 'Bernadett', 'Zsuzsanna', 'Aladár, Álmos', 'Eleonóra', 'Gerzson', 'Alfréd', 'Mátyás', 'Géza', 'Edina', 'Ákos, Bátor', 'Elemér'],
+            
+            ['Albin', 'Lujza, Lujza', 'Kornélia', 'Kázmér', 'Adorján, Adrián', 'Leonóra, Inez', 'Tamás', 'Zoltán', 'Franciska, Fanni', 'Ildikó', 'Szilárd', 'Gergely', 'Krisztián, Ajtony', 'Matild', 'Kristóf', 'Henrietta', 'Gertrúd, Patrik', 'Sándor, Ede', 'József, Bánk', 'Klaudia', 'Benedek', 'Beáta, Izolda', 'Emőke', 'Gábor, Karina', 'Irén, Irisz', 'Emánuel', 'Hajnalka', 'Gedeon, Johanna', 'Auguszta', 'Zalán', 'Árpád'],
+            
+            ['Hugó', 'Áron', 'Buda, Richárd', 'Izidor', 'Vince', 'Vilmos, Bíborka', 'Herman', 'Dénes', 'Erhard', 'Zsolt', 'Leó, Szaniszló', 'Gyula', 'Ida', 'Tibor', 'Anasztázia, Tas', 'Csongor', 'Rudolf', 'Andrea, Ilma', 'Emma', 'Tivadar', 'Konrád', 'Csilla, Noémi', 'Béla', 'György', 'Márk', 'Ervin', 'Zita', 'Valéria', 'Péter', 'Katalin, Kitti'],
+            
+            ['Fülöp, Jakab', 'Zsigmond', 'Tímea, Irma', 'Mónika, Flórián', 'Györgyi', 'Ivett, Frida', 'Gizella', 'Mihály', 'Gergely', 'Ármin, Pálma', 'Ferenc', 'Pongrác', 'Szervác, Imola', 'Bonifác', 'Zsófia, Szonja', 'Mózes, Botond', 'Paszkál', 'Erik, Alexandra', 'Ivó, Milán', 'Bernát, Felícia', 'Konstantin', 'Júlia, Rita', 'Dezső', 'Eszter, Eliza', 'Orbán', 'Fülöp, Evelin', 'Hella', 'Emil, Csanád', 'Magdolna', 'Janka, Zsanett', 'Angéla, Petronella'],
+            
+            ['Tünde', 'Kármen, Anita', 'Klotild', 'Bulcsú', 'Fatime', 'Norbert, Cintia', 'Róbert', 'Medárd', 'Félix', 'Margit, Gréta', 'Barnabás', 'Villő', 'Antal, Anett', 'Vazul', 'Jolán, Vid', 'Jusztin', 'Laura, Alida', 'Arnold, Levente', 'Gyárfás', 'Rafael', 'Alajos, Leila', 'Paulina', 'Zoltán', 'Iván', 'Vilmos', 'János, Pál', 'László', 'Levente, Irén', 'Péter, Pál', 'Pál'],
+            
+            ['Tihamér, Annamária', 'Ottó', 'Kornél, Soma', 'Ulrik', 'Emese, Sarolta', 'Csaba', 'Apollónia', 'Ellák', 'Lukrécia', 'Amália', 'Nóra, Lili', 'Izabella, Dalma', 'Jenő', 'Örs, Stella', 'Henrik, Roland', 'Valter', 'Endre, Elek', 'Frigyes', 'Emília', 'Illés', 'Dániel, Daniela', 'Magdolna', 'Lenke', 'Kinga, Kincső', 'Kristóf, Jakab', 'Anna, Anikó', 'Olga, Liliána', 'Szabolcs', 'Márta, Flóra', 'Judit, Xénia', 'Oszkár'],
+            
+            ['Boglárka', 'Lehel', 'Hermina', 'Domonkos, Dominika', 'Krisztina', 'Berta, Bettina', 'Ibolya', 'László', 'Emőd', 'Lörinc', 'Zsuzsanna, Tiborc', 'Klára', 'Ipoly', 'Marcell', 'Mária', 'Ábrahám', 'Jácint', 'Ilona', 'Huba', 'István', 'Sámuel, Hajna', 'Menyhért, Mirjam', 'Bence', 'Bertalan', 'Lajos, Patrícia', 'Izsó', 'Gáspár', 'Ágoston', 'Beatrix, Erna', 'Rózsa', 'Erika, Bella'],
+            
+            ['Egyed, Egon', 'Rebeka, Dorina', 'Hilda', 'Rozália', 'Viktor, Lőrinc', 'Zakariás', 'Regina', 'Mária, Adrienn', 'Ádám', 'Nikolett, Hunor', 'Teodóra', 'Mária', 'Kornél', 'Roxána, Szeréna', 'Enikő, Melitta', 'Edit', 'Zsófia', 'Diána', 'Vilhelmina', 'Friderika', 'Máté, Mirella', 'Móric', 'Tekla', 'Gellért, Mercédesz', 'Eufrozina, Kende', 'Jusztina', 'Adalbert', 'Vencel', 'Mihály', 'Jeromos'],
+            
+            ['Malvin', 'Petra', 'Helga', 'Ferenc', 'Aurél', 'Brúnó, Renáta', 'Amália', 'Koppány', 'Dénes', 'Gedeon', 'Brigitta', 'Miksa', 'Kálmán, Ede', 'Helén', 'Teréz', 'Gál', 'Hedvig', 'Lukács', 'Nándor', 'Vendel', 'Orsolya', 'Előd', 'Gyöngyi', 'Salamon', 'Blanka, Bianka', 'Dömötör', 'Szabina', 'Simon, Szimonetta', 'Nárcisz', 'Alfonz', 'Farkas'],
+            
+            ['Marianna', 'Achilles', 'Győző', 'Károly', 'Imre', 'Lénárd', 'Rezső', 'Zsombor', 'Tivadar', 'Réka', 'Márton', 'Jónás, Renátó', 'Szilvia', 'Aliz', 'Albert, Lipót', 'Ödön', 'Hortenzia, Gergő', 'Jenő', 'Erzsébet', 'Jolán', 'Olivér', 'Cecília', 'Kelemen, Klementina', 'Emma', 'Katalin', 'Virág', 'Virgil', 'Stefánia', 'Taksony', 'András, Andor'],
+            
+            ['Elza', 'Melinda, Vivien', 'Ferenc, Olívia', 'Borbála, Barbara', 'Vilma', 'Miklós', 'Ambrus', 'Mária', 'Natália', 'Judit', 'Árpád', 'Gabriella', 'Luca, Otília', 'Szilárda', 'Valér', 'Etelka, Aletta', 'Lázár, Olimpia', 'Auguszta', 'Viola', 'Teofil', 'Tamás', 'Zéno', 'Viktória', 'Ádám, Éva', 'Eugénia', 'István', 'János', 'Kamilla', 'Tamás, Tamara', 'Dávid', 'Szilveszter']
+        ];
+
+        
+        const honapNevek = [
+            'Január', 'Február', 'Március', 'Április', 'Május', 'Június',
+            'Július', 'Augusztus', 'Szeptember', 'Október', 'November', 'December'
+        ];
+
+        let aktualisHonap = new Date().getMonth(); 
+
+        
+        function keresNevnapot(nev) {
+            const keresettNev = nev.toLowerCase().trim();
+            const talalatok = [];
+
+            
+            for (let honap = 0; honap < nevnapok.length; honap++) {
+                
+                for (let nap = 0; nap < nevnapok[honap].length; nap++) {
+                    const napNevei = nevnapok[honap][nap].toLowerCase();
+                    
+                    
+                    if (napNevei.includes(keresettNev)) {
+                        
+                        talalatok.push({
+                            honap: honapNevek[honap],
+                            nap: nap + 1,
+                            nevek: nevnapok[honap][nap]
+                        });
+                    }
+                }
+            }
+
+            return talalatok;
+        }
+
+        
+        function keresNev() {
+            const nevInput = document.getElementById('nev-input');
+            const nev = nevInput.value;
+
+            if (!nev || nev.trim() === '') {
+                alert('Kérem adjon meg egy nevet!');
+                return;
+            }
+
+            const talalatok = keresNevnapot(nev);
+            const eredmenyDiv = document.getElementById('kereses-eredmeny');
+
+            if (talalatok.length === 0) {
+                eredmenyDiv.innerHTML = `
+                    <div class="search-result bg-red-50 border-2 border-red-300 rounded-lg p-4">
+                        <p class="text-red-700 font-semibold">❌ Nem található névnap "${nev}" névre.</p>
+                    </div>
+                `;
+            } else {
+                let html = '<div class="search-result bg-green-50 border-2 border-green-300 rounded-lg p-4">';
+                html += `<p class="text-green-700 font-bold mb-2">✅ Találatok "${nev}" névre:</p>`;
+                html += '<ul class="space-y-1">';
+                
+                talalatok.forEach(t => {
+                    html += `<li class="text-gray-700">📅 <strong>${t.honap} ${t.nap}.</strong> - ${t.nevek}</li>`;
+                });
+                
+                html += '</ul></div>';
+                eredmenyDiv.innerHTML = html;
+            }
+        }
+
+        
+        function frissitNevnapHonap(honap) {
+            const lista = document.getElementById('nevnap-lista');
+            const cim = document.getElementById('honap-cim');
+
+            cim.textContent = honapNevek[honap];
+            lista.innerHTML = '';
+
+            
+            for (let nap = 0; nap < nevnapok[honap].length; nap++) {
+                const napSzam = nap + 1; 
+                const nevek = nevnapok[honap][nap];
+
+                const card = document.createElement('div');
+                card.className = 'day-card bg-gradient-to-br from-pink-50 to-red-50 p-4 rounded-lg border border-pink-200';
+                card.innerHTML = `
+                    <div class="text-sm text-gray-600 font-semibold">${honapNevek[honap]} ${napSzam}.</div>
+                    <div class="text-lg font-bold text-gray-900 mt-1">${nevek}</div>
+                `;
+                lista.appendChild(card);
+            }
+        }
+
+        
+        function elozoHonap() {
+            aktualisHonap--;
+            if (aktualisHonap < 0) {
+                aktualisHonap = 11;
+            }
+            frissitNevnapHonap(aktualisHonap);
+        }
+
+        
+        function kovetkezoHonap() {
+            aktualisHonap++;
+            if (aktualisHonap > 11) {
+                aktualisHonap = 0;
+            }
+            frissitNevnapHonap(aktualisHonap);
+        }
+
+        
+        function maiNevnap() {
+            const ma = new Date();
+            const honap = ma.getMonth();
+            const nap = ma.getDate() - 1; 
+
+            const maiNevek = nevnapok[honap][nap];
+            document.getElementById('mai-nevnap').textContent = maiNevek;
+        }
+
+        
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        
+        document.getElementById('nev-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                keresNev();
+            }
+        });
+
+        
+        window.addEventListener('load', function() {
+            frissitNevnapHonap(aktualisHonap);
+            maiNevnap();
+        });
+    </script>
+</body>
+</html>

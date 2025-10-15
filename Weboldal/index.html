@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CleanCarpet Pro - Professzionális Szőnyegtisztítás</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f8f9fa;
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2d5a7b 100%);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .service-card {
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #2d5a7b;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .filter-btn {
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background: #2d5a7b;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+     
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold text-blue-900">CleanCarpet Pro</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="nav-link active text-gray-700 hover:text-blue-900 font-medium">Főoldal</a>
+                    <a href="arkalkulator.html" class="nav-link text-gray-700 hover:text-blue-900 font-medium">Árkalkulátor</a>
+                    <a href="nevnap.html" class="nav-link text-gray-700 hover:text-blue-900 font-medium">Névnap Naptár</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+          
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="index.html" class="block px-3 py-2 text-blue-900 font-medium">Főoldal</a>
+                <a href="arkalkulator.html" class="block px-3 py-2 text-gray-700 hover:text-blue-900">Árkalkulátor</a>
+                <a href="nevnap.html" class="block px-3 py-2 text-gray-700 hover:text-blue-900">Névnap Naptár</a>
+            </div>
+        </div>
+    </nav>
+
+      
+    <section class="hero-gradient text-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6">Professzionális Szőnyegtisztítás</h1>
+            <p class="text-xl md:text-2xl mb-8 text-gray-200">Tisztaság és frissesség otthonában</p>
+            <p class="text-lg max-w-3xl mx-auto mb-10 leading-relaxed">
+                Több mint 15 éves tapasztalattal rendelkezünk a szőnyegtisztítás területén. 
+                Modern technológiával és környezetbarát tisztítószerekkel dolgozunk, 
+                hogy szőnyegei újra ragyogjanak.
+            </p>
+            <a href="arkalkulator.html" class="inline-block bg-white text-blue-900 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+                Árajánlat kérése
+            </a>
+        </div>
+    </section>
+
+     
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-900">Szolgáltatásaink</h2>
+            
+             
+            <div class="flex flex-wrap justify-center gap-4 mb-8">
+                <button onclick="valtFul('otthoni')" class="tab-btn px-6 py-3 rounded-lg font-semibold bg-blue-900 text-white">
+                    Otthoni tisztítás
+                </button>
+                <button onclick="valtFul('uzleti')" class="tab-btn px-6 py-3 rounded-lg font-semibold bg-gray-200 text-gray-700 hover:bg-gray-300">
+                    Üzleti tisztítás
+                </button>
+                <button onclick="valtFul('kulonleges')" class="tab-btn px-6 py-3 rounded-lg font-semibold bg-gray-200 text-gray-700 hover:bg-gray-300">
+                    Különleges szolgáltatások
+                </button>
+            </div>
+
+             
+            <div id="otthoni" class="tab-content active">
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="service-card bg-gray-50 p-6 rounded-lg">
+                        <div class="text-4xl mb-4">🏠</div>
+                        <h3 class="text-xl font-bold mb-3 text-gray-900">Lakásszőnyeg tisztítás</h3>
+                        <p class="text-gray-600 leading-relaxed">Alapos tisztítás otthoni szőnyegekhez. Gyors száradás, környezetbarát szerek.</p>
+                        <p class="mt-4 text-blue-900 font-semibold">Ár: 2500 Ft/m²-től</p>
+                    </div>
+                    <div class="service-card bg-gray-50 p-6 rounded-lg">
+                        <div class="text-4xl mb-4">🛋️</div>
+                        <h3 class="text-xl font-bold mb-3 text-gray-900">Kárpittisztítás</h3>
+                        <p class="text-gray-600 leading-relaxed">Kanapék, fotelek professzionális tisztítása. Folteltávolítás garantáltan.</p>
+                        <p class="mt-4 text-blue-900 font-semibold">Ár: 3000 Ft/m²-től</p>
+                    </div>
+                    <div class="service-card bg-gray-50 p-6 rounded-lg">
+                        <div class="text-4xl mb-4">🧼</div>
+                        <h3 class="text-xl font-bold mb-3 text-gray-900">Mélytisztítás</h3>
+                        <p class="text-gray-600 leading-relaxed">Intenzív tisztítás erősen szennyezett szőnyegekhez. Allergén eltávolítás.</p>
+                        <p class="mt-4 text-blue-900 font-semibold">Ár: 3500 Ft/m²-től</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="uzleti" class="tab-content">
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="service-card bg-gray-50 p-6 rounded-lg">
+                        <div class="text-4xl mb-4">🏢</div>
+                        <h3 class="text-xl font-bold mb-3 text-gray-900">Irodai szőnyegtisztítás</h3>
+                        <p class="text-gray-600 leading-relaxed">Nagy területű irodai szőnyegek tisztítása. Hétvégi munkavégzés lehetséges.</p>
+                        <p class="mt-4 text-blue-900 font-semibold">Ár: 2000 Ft/m²-től</p>
+                    </div>
+                    <div class="service-card bg-gray-50 p-6 rounded-lg">
+                        <div class="text-4xl mb-4">🏨</div>
+                        <h3 class="text-xl font-bold mb-3 text-gray-900">Szállodai tisztítás</h3>
+                        <p class="text-gray-600 leading-relaxed">Szállodák, vendéglátóhelyek rendszeres karbantartása. Szerződéses árak.</p>
+                        <p class="mt-4 text-blue-900 font-semibold">Egyedi árajánlat</p>
+                    </div>
+                    <div class="service-card bg-gray-50 p-6 rounded-lg">
+                        <div class="text-4xl mb-4">🏪</div>
+                        <h3 class="text-xl font-bold mb-3 text-gray-900">Üzleti helyiségek</h3>
+                        <p class="text-gray-600 leading-relaxed">Üzletek, bemutatótermek tisztítása. Gyors, hatékony munka.</p>
+                        <p class="mt-4 text-blue-900 font-semibold">Ár: 2200 Ft/m²-től</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="kulonleges" class="tab-content">
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="service-card bg-gray-50 p-6 rounded-lg">
+                        <div class="text-4xl mb-4">🎨</div>
+                        <h3 class="text-xl font-bold mb-3 text-gray-900">Perzsaszőnyeg tisztítás</h3>
+                        <p class="text-gray-600 leading-relaxed">Kézi csomózású szőnyegek speciális kezelése. Szakértői gondozás.</p>
+                        <p class="mt-4 text-blue-900 font-semibold">Ár: 4500 Ft/m²-től</p>
+                    </div>
+                    <div class="service-card bg-gray-50 p-6 rounded-lg">
+                        <div class="text-4xl mb-4">💧</div>
+                        <h3 class="text-xl font-bold mb-3 text-gray-900">Vízkár utáni helyreállítás</h3>
+                        <p class="text-gray-600 leading-relaxed">Gyors beavatkozás vízkár esetén. Szárítás, fertőtlenítés.</p>
+                        <p class="mt-4 text-blue-900 font-semibold">Sürgősségi szolgáltatás</p>
+                    </div>
+                    <div class="service-card bg-gray-50 p-6 rounded-lg">
+                        <div class="text-4xl mb-4">🌿</div>
+                        <h3 class="text-xl font-bold mb-3 text-gray-900">Öko tisztítás</h3>
+                        <p class="text-gray-600 leading-relaxed">100% természetes tisztítószerek. Allergiásoknak is ajánlott.</p>
+                        <p class="mt-4 text-blue-900 font-semibold">Ár: +500 Ft/m²</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+      
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 text-gray-900">Szűrje szolgáltatásainkat</h2>
+            
+            <div class="flex flex-wrap justify-center gap-4 mb-8">
+                <button onclick="szuroSzolgaltatasok('mind')" class="filter-btn active px-6 py-2 rounded-lg font-semibold">
+                    Összes
+                </button>
+                <button onclick="szuroSzolgaltatasok('otthoni')" class="filter-btn px-6 py-2 rounded-lg font-semibold bg-gray-200">
+                    Otthoni
+                </button>
+                <button onclick="szuroSzolgaltatasok('uzleti')" class="filter-btn px-6 py-2 rounded-lg font-semibold bg-gray-200">
+                    Üzleti
+                </button>
+                <button onclick="szuroSzolgaltatasok('kulonleges')" class="filter-btn px-6 py-2 rounded-lg font-semibold bg-gray-200">
+                    Különleges
+                </button>
+            </div>
+
+            <div id="szolgaltatas-lista" class="grid md:grid-cols-4 gap-6">
+                 Ezek dinamikusan töltődnek be 
+            </div>
+
+            <div id="szuro-eredmeny" class="text-center mt-6 text-gray-600 font-semibold"></div>
+        </div>
+    </section>
+
+      
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-900">Látogasson el hozzánk</h2>
+            <div class="rounded-lg overflow-hidden shadow-lg">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2695.3547834467894!2d19.040235876916754!3d47.49801197117535!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4741dc14f3b8b7a9%3A0x400c4290c1e1160!2sBudapest!5e0!3m2!1shu!2shu!4v1234567890123!5m2!1shu!2shu" 
+                    width="100%" 
+                    height="450" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy">
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+      
+    <section class="py-16 bg-gray-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-8 text-center">
+                <div>
+                    <div class="text-4xl mb-4">📞</div>
+                    <h3 class="text-xl font-bold mb-2">Telefon</h3>
+                    <p class="text-gray-300">+36 1 234 5678</p>
+                    <p class="text-gray-300">+36 20 123 4567</p>
+                </div>
+                <div>
+                    <div class="text-4xl mb-4">✉️</div>
+                    <h3 class="text-xl font-bold mb-2">Email</h3>
+                    <p class="text-gray-300">info@cleancarpet.hu</p>
+                    <p class="text-gray-300">rendeles@cleancarpet.hu</p>
+                </div>
+                <div>
+                    <div class="text-4xl mb-4">📍</div>
+                    <h3 class="text-xl font-bold mb-2">Cím</h3>
+                    <p class="text-gray-300">1051 Budapest</p>
+                    <p class="text-gray-300">Példa utca 12.</p>
+                </div>
+            </div>
+            <div class="text-center mt-12 pt-8 border-t border-gray-700">
+                <p class="text-gray-400">&copy; 2025 CleanCarpet Pro. Minden jog fenntartva.</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        
+        function valtFul(fulId) {
+            
+            const tartalmak = document.querySelectorAll('.tab-content');
+            tartalmak.forEach(tartalom => {
+                tartalom.classList.remove('active');
+            });
+
+            
+            const gombok = document.querySelectorAll('.tab-btn');
+            gombok.forEach(gomb => {
+                gomb.classList.remove('bg-blue-900', 'text-white');
+                gomb.classList.add('bg-gray-200', 'text-gray-700');
+            });
+
+            
+            document.getElementById(fulId).classList.add('active');
+           
+            event.target.classList.remove('bg-gray-200', 'text-gray-700');
+            event.target.classList.add('bg-blue-900', 'text-white');
+        }
+
+        
+        function szuroSzolgaltatasok(kategoria) {
+            
+            const szolgaltatasok = [
+                { nev: 'Lakásszőnyeg', kategoria: 'otthoni', emoji: '🏠' },
+                { nev: 'Kárpittisztítás', kategoria: 'otthoni', emoji: '🛋️' },
+                { nev: 'Mélytisztítás', kategoria: 'otthoni', emoji: '🧼' },
+                { nev: 'Irodai szőnyeg', kategoria: 'uzleti', emoji: '🏢' },
+                { nev: 'Szállodai tisztítás', kategoria: 'uzleti', emoji: '🏨' },
+                { nev: 'Üzleti helyiségek', kategoria: 'uzleti', emoji: '🏪' },
+                { nev: 'Perzsaszőnyeg', kategoria: 'kulonleges', emoji: '🎨' },
+                { nev: 'Vízkár helyreállítás', kategoria: 'kulonleges', emoji: '💧' },
+                { nev: 'Öko tisztítás', kategoria: 'kulonleges', emoji: '🌿' }
+            ];
+
+            const lista = document.getElementById('szolgaltatas-lista');
+            lista.innerHTML = '';
+
+            let szamlalo = 0; 
+
+            
+            szolgaltatasok.forEach(szolg => {
+                
+                if (kategoria === 'mind' || szolg.kategoria === kategoria) {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white p-6 rounded-lg shadow-md text-center service-card';
+                    card.innerHTML = `
+                        <div class="text-5xl mb-3">${szolg.emoji}</div>
+                        <h3 class="font-bold text-gray-900">${szolg.nev}</h3>
+                    `;
+                    lista.appendChild(card);
+                    szamlalo++; 
+                }
+            });
+
+            
+            document.getElementById('szuro-eredmeny').textContent = 
+                `${szamlalo} szolgáltatás megjelenítve`;
+
+            
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        
+        window.addEventListener('load', function() {
+            szuroSzolgaltatasok('mind');
+        });
+    </script>
+</body>
+</html>

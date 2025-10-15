@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Árkalkulátor - CleanCarpet Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .calculator-card {
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-box {
+            animation: pulse 0.5s ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #667eea;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+     
+    <nav class="bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-2xl font-bold text-blue-900">CleanCarpet Pro</a>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="nav-link text-gray-700 hover:text-blue-900 font-medium">Főoldal</a>
+                    <a href="arkalkulator.html" class="nav-link text-blue-900 font-bold">Árkalkulátor</a>
+                    <a href="nevnap.html" class="nav-link text-gray-700 hover:text-blue-900 font-medium">Névnap Naptár</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="index.html" class="block px-3 py-2 text-gray-700 hover:text-blue-900">Főoldal</a>
+                <a href="arkalkulator.html" class="block px-3 py-2 text-blue-900 font-bold">Árkalkulátor</a>
+                <a href="nevnap.html" class="block px-3 py-2 text-gray-700 hover:text-blue-900">Névnap Naptár</a>
+            </div>
+        </div>
+    </nav>
+
+     
+    <div class="max-w-4xl mx-auto px-4 py-12">
+        <div class="calculator-card bg-white rounded-2xl shadow-2xl p-8 md:p-12">
+            <h1 class="text-3xl md:text-4xl font-bold text-center mb-3 text-gray-900">Árkalkulátor</h1>
+            <p class="text-center text-gray-600 mb-8">Számítsa ki a szőnyegtisztítás várható költségét</p>
+
+            <div class="space-y-6">
+                 Terület megadása 
+                <div>
+                    <label class="block text-lg font-semibold mb-2 text-gray-700">
+                        Szőnyeg területe (m²)
+                    </label>
+                    <input 
+                        type="number" 
+                        id="terulet-input" 
+                        min="1" 
+                        max="500"
+                        placeholder="Pl: 15"
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none text-lg"
+                    >
+                    <p class="text-sm text-gray-500 mt-1">Minimum 1 m², maximum 500 m²</p>
+                </div>
+
+                 
+                <div>
+                    <label class="block text-lg font-semibold mb-3 text-gray-700">
+                        Szőnyeg típusa
+                    </label>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="tipus" value="normal" class="peer hidden" checked>
+                            <div class="border-2 border-gray-300 rounded-lg p-4 text-center peer-checked:border-purple-500 peer-checked:bg-purple-50 transition">
+                                <div class="text-3xl mb-2">🏠</div>
+                                <div class="font-bold text-gray-900">Normál</div>
+                                <div class="text-sm text-gray-600">2500 Ft/m²</div>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="tipus" value="premium" class="peer hidden">
+                            <div class="border-2 border-gray-300 rounded-lg p-4 text-center peer-checked:border-purple-500 peer-checked:bg-purple-50 transition">
+                                <div class="text-3xl mb-2">⭐</div>
+                                <div class="font-bold text-gray-900">Prémium</div>
+                                <div class="text-sm text-gray-600">3500 Ft/m²</div>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="tipus" value="delux" class="peer hidden">
+                            <div class="border-2 border-gray-300 rounded-lg p-4 text-center peer-checked:border-purple-500 peer-checked:bg-purple-50 transition">
+                                <div class="text-3xl mb-2">💎</div>
+                                <div class="font-bold text-gray-900">Delux</div>
+                                <div class="text-sm text-gray-600">4500 Ft/m²</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                
+                <div>
+                    <label class="block text-lg font-semibold mb-2 text-gray-700">
+                        Megrendelő neve
+                    </label>
+                    <input 
+                        type="text" 
+                        id="nev-input" 
+                        placeholder="Pl: János"
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none text-lg"
+                    >
+                    <p class="text-sm text-gray-500 mt-1">Ha ma van a névnapja, 10% kedvezményt kap!</p>
+                </div>
+
+                  
+                <button 
+                    onclick="szamolArat()"
+                    class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-4 rounded-lg font-bold text-lg hover:from-purple-700 hover:to-indigo-700 transition shadow-lg">
+                    Ár kiszámítása
+                </button>
+
+                  
+                <div id="eredmeny" class="hidden">
+                    <div class="result-box bg-gradient-to-r from-green-50 to-blue-50 border-2 border-green-300 rounded-lg p-6 mt-6">
+                        <h3 class="text-xl font-bold mb-4 text-gray-900">Kalkuláció eredménye</h3>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-gray-700">Terület:</span>
+                                <span class="font-semibold" id="eredmeny-terulet"></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-700">Típus:</span>
+                                <span class="font-semibold" id="eredmeny-tipus"></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-700">Egységár:</span>
+                                <span class="font-semibold" id="eredmeny-egysegar"></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-700">Alapár:</span>
+                                <span class="font-semibold" id="eredmeny-alapar"></span>
+                            </div>
+                            <div class="flex justify-between text-green-600" id="kedvezmeny-sor" style="display: none;">
+                                
+                                <span id="kedvezmeny-szoveg">Kedvezmény:</span>
+                                <span class="font-semibold" id="eredmeny-kedvezmeny"></span>
+                            </div>
+                            <hr class="my-3">
+                            <div class="flex justify-between text-2xl font-bold text-purple-600">
+                                <span>Végösszeg:</span>
+                                <span id="eredmeny-vegosszeg"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                 
+                <div class="bg-gray-50 rounded-lg p-6 mt-6">
+                    <h3 class="text-lg font-bold mb-3 text-gray-900">📊 Statisztika</h3>
+                    <p class="text-gray-700">Legnagyobb eddigi rendelés: <span id="max-terulet" class="font-bold text-purple-600">-</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        
+        const nevnapok = {
+            1: { 
+                1: ['Fruzsina'], 2: ['Ábel'], 3: ['Genovéva', 'Benjámin'], 4: ['Titusz', 'Leona'], 5: ['Simon'],
+                6: ['Boldizsár'], 7: ['Attila', 'Ramóna'], 8: ['Gyöngyvér'], 9: ['Marcell'], 10: ['Melánia'],
+                11: ['Ágota'], 12: ['Ernő'], 13: ['Veronika'], 14: ['Bódog'], 15: ['Lóránt', 'Lóránt'],
+                16: ['Gusztáv'], 17: ['Antal', 'Antónia'], 18: ['Piroska'], 19: ['Sára', 'Márió'], 20: ['Fábián', 'Sebestyén'],
+                21: ['Ágnes'], 22: ['Vince', 'Artúr'], 23: ['Zelma', 'Rajmund'], 24: ['Timót'], 25: ['Pál'],
+                26: ['Paula', 'Vanda'], 27: ['Angelika'], 28: ['Károly', 'Karola'], 29: ['Adél'], 30: ['Martina', 'Gerda'],
+                31: ['Marcella']
+            },
+            2: { 
+                1: ['Ignác'], 2: ['Karolina', 'Aida'], 3: ['Balázs'], 4: ['Ráhel', 'Csenge'], 5: ['Ágota', 'Ingrid'],
+                6: ['Dóra', 'Dorottya'], 7: ['Tódor', 'Rómeó'], 8: ['Aranka'], 9: ['Abigél', 'Alex'], 10: ['Elvira'],
+                11: ['Bertold', 'Marietta'], 12: ['Lívia', 'Lídia'], 13: ['Ella', 'Linda'], 14: ['Bálint', 'Valentin'], 15: ['Kolos', 'Georgina'],
+                16: ['Julianna', 'Lilla'], 17: ['Donát'], 18: ['Bernadett'], 19: ['Zsuzsanna'], 20: ['Aladár', 'Álmos'],
+                21: ['Eleonóra'], 22: ['Gerzson'], 23: ['Alfréd'], 24: ['Mátyás'], 25: ['Géza'],
+                26: ['Edina'], 27: ['Ákos', 'Bátor'], 28: ['Elemér'], 29: ['Oszkár']
+            },
+            3: { 
+                1: ['Albin'], 2: ['Lujza'], 3: ['Kornélia'], 4: ['Kázmér'], 5: ['Adorján', 'Adrián'],
+                6: ['Leonóra', 'Inez'], 7: ['Tamás'], 8: ['Zoltán'], 9: ['Franciska', 'Fanni'], 10: ['Ildikó'],
+                11: ['Szilárd'], 12: ['Gergely'], 13: ['Krisztián', 'Ajtony'], 14: ['Matilda'], 15: ['Kristóf'],
+                16: ['Henrietta'], 17: ['Gertrúd', 'Patrik'], 18: ['Sándor', 'Ede'], 19: ['József', 'Bánk'], 20: ['Klaudia'],
+                21: ['Benedek'], 22: ['Beáta', 'Izolda'], 23: ['Emőke'], 24: ['Gábor', 'Karina'], 25: ['Irén', 'Irisz'],
+                26: ['Emánuel'], 27: ['Hajnalka'], 28: ['Gedeon', 'Johanna'], 29: ['Auguszta'], 30: ['Zalán'],
+                31: ['Árpád']
+            },
+            4: { 
+                1: ['Hugó'], 2: ['Áron'], 3: ['Buda', 'Richárd'], 4: ['Izidor'], 5: ['Vince'],
+                6: ['Vilmos', 'Bíborka'], 7: ['Herman'], 8: ['Dénes'], 9: ['Erhard'], 10: ['Zsolt'],
+                11: ['Leó', 'Szaniszló'], 12: ['Gyula'], 13: ['Ida'], 14: ['Tibor'], 15: ['Anasztázia', 'Tas'],
+                16: ['Csongor'], 17: ['Rudolf'], 18: ['Andrea', 'Ilma'], 19: ['Emma'], 20: ['Tivadar'],
+                21: ['Konrád'], 22: ['Csilla', 'Noémi'], 23: ['Béla'], 24: ['György'], 25: ['Márk'],
+                26: ['Ervin'], 27: ['Zita'], 28: ['Valéria'], 29: ['Péter'], 30: ['Katalin', 'Kitti']
+            },
+            5: { 
+                1: ['Fülöp', 'Jakab'], 2: ['Zsigmond'], 3: ['Tímea', 'Irma'], 4: ['Mónika', 'Flórián'], 5: ['Györgyi'],
+                6: ['Ivett', 'Frida'], 7: ['Gizella'], 8: ['Mihály'], 9: ['Gergely'], 10: ['Ármin', 'Pálma'],
+                11: ['Ferenc'], 12: ['Pongrác'], 13: ['Szervác', 'Imola'], 14: ['Bonifác'], 15: ['Zsófia', 'Szonja'],
+                16: ['Mózes', 'Botond'], 17: ['Paszkál'], 18: ['Erik', 'Alexandra'], 19: ['Ivó', 'Milán'], 20: ['Bernát', 'Felícia'],
+                21: ['Konstantin'], 22: ['Júlia', 'Rita'], 23: ['Dezső'], 24: ['Eliza', 'Eszter'], 25: ['Orbán'],
+                26: ['Fülöp', 'Evelin'], 27: ['Hella'], 28: ['Emil', 'Csanád'], 29: ['Magdolna'], 30: ['Zsanett', 'Janka'],
+                31: ['Angéla', 'Petronella']
+            },
+            6: { 
+                1: ['Tünde'], 2: ['Kármen', 'Anita'], 3: ['Klotild'], 4: ['Bulcsú'], 5: ['Fatime'],
+                6: ['Norbert', 'Cintia'], 7: ['Róbert'], 8: ['Medárd'], 9: ['Félix'], 10: ['Margit', 'Gréta'],
+                11: ['Barnabás'], 12: ['Villő'], 13: ['Antal', 'Anett'], 14: ['Vazul'], 15: ['Jolán', 'Vid'],
+                16: ['Jusztin'], 17: ['Laura', 'Alida'], 18: ['Arnold', 'Levente'], 19: ['Gyárfás'], 20: ['Rafael'],
+                21: ['Alajos', 'Leila'], 22: ['Paulina'], 23: ['Zoltán'], 24: ['Iván'], 25: ['Vilmos'],
+                26: ['János', 'Pál'], 27: ['László'], 28: ['Levente', 'Irén'], 29: ['Péter', 'Pál'], 30: ['Pál']
+            },
+            7: { 
+                1: ['Tihamér', 'Annamária'], 2: ['Ottó'], 3: ['Kornél', 'Soma'], 4: ['Ulrik'], 5: ['Emese', 'Sarolta'],
+                6: ['Csaba'], 7: ['Apollónia'], 8: ['Ellák'], 9: ['Lukrécia'], 10: ['Amália'],
+                11: ['Nóra', 'Lili'], 12: ['Izabella', 'Dalma'], 13: ['Jenő'], 14: ['Örs', 'Stella'], 15: ['Henrik', 'Roland'],
+                16: ['Valter'], 17: ['Endre', 'Elek'], 18: ['Frigyes'], 19: ['Emília'], 20: ['Illés'],
+                21: ['Dániel', 'Daniella'], 22: ['Magdolna'], 23: ['Lenke'], 24: ['Kinga', 'Kincső'], 25: ['Kristóf', 'Jakab'],
+                26: ['Anna', 'Anikó'], 27: ['Olga', 'Liliána'], 28: ['Szabolcs'], 29: ['Márta', 'Flóra'], 30: ['Judit', 'Xénia'],
+                31: ['Oszkár']
+            },
+            8: { 
+                1: ['Boglárka'], 2: ['Lehel'], 3: ['Hermina'], 4: ['Domonkos', 'Dominika'], 5: ['Krisztina'],
+                6: ['Berta', 'Bettina'], 7: ['Ibolya'], 8: ['László'], 9: ['Emőd'], 10: ['Lörinc'],
+                11: ['Zsuzsanna', 'Tiborc'], 12: ['Klára'], 13: ['Ipoly'], 14: ['Marcell'], 15: ['Mária'],
+                16: ['Ábrahám'], 17: ['Jácint'], 18: ['Ilona'], 19: ['Huba'], 20: ['István'],
+                21: ['Sámuel', 'Hajna'], 22: ['Menyhért', 'Mirjam'], 23: ['Bence'], 24: ['Bertalan'], 25: ['Lajos', 'Patrícia'],
+                26: ['Izsó'], 27: ['Gáspár'], 28: ['Ágoston'], 29: ['Beatrix', 'Erna'], 30: ['Rózsa'],
+                31: ['Bella', 'Erika']
+            },
+            9: { 
+                1: ['Egyed', 'Egon'], 2: ['Rebeka', 'Dorina'], 3: ['Hilda'], 4: ['Rozália'], 5: ['Viktor', 'Lőrinc'],
+                6: ['Zakariás'], 7: ['Regina'], 8: ['Mária', 'Adrienn'], 9: ['Ádám'], 10: ['Nikolett', 'Hunor'],
+                11: ['Teodóra'], 12: ['Mária'], 13: ['Kornél'], 14: ['Roxána', 'Szeréna'], 15: ['Enikő', 'Melitta'],
+                16: ['Edit'], 17: ['Zsófia'], 18: ['Diána'], 19: ['Vilhelmina'], 20: ['Friderika'],
+                21: ['Máté', 'Mirella'], 22: ['Móric'], 23: ['Tekla'], 24: ['Gellért', 'Mercédesz'], 25: ['Eufrozina', 'Kende'],
+                26: ['Jusztina'], 27: ['Adalbert'], 28: ['Vencel'], 29: ['Mihály'], 30: ['Jeromos']
+            },
+            10: { 
+                1: ['Malvin'], 2: ['Petra'], 3: ['Helga'], 4: ['Ferenc'], 5: ['Aurél'],
+                6: ['Brúnó', 'Renáta'], 7: ['Amália'], 8: ['Koppány'], 9: ['Dénes'], 10: ['Gedeon'],
+                11: ['Brigitta'], 12: ['Miksa'], 13: ['Kálmán', 'Ede'], 14: ['Helén'], 15: ['Teréz'],
+                16: ['Gál'], 17: ['Hedvig'], 18: ['Lukács'], 19: ['Nándor'], 20: ['Vendel'],
+                21: ['Orsolya'], 22: ['Előd'], 23: ['Gyöngyi'], 24: ['Salamon'], 25: ['Blanka', 'Bianka'],
+                26: ['Dömötör'], 27: ['Szabina'], 28: ['Simon', 'Szimonetta'], 29: ['Nárcisz'], 30: ['Alfonz'],
+                31: ['Farkas']
+            },
+            11: { 
+                1: ['Marianna'], 2: ['Achilles'], 3: ['Győző'], 4: ['Károly'], 5: ['Imre'],
+                6: ['Lénárd'], 7: ['Rezső'], 8: ['Zsombor'], 9: ['Tivadar'], 10: ['Réka'],
+                11: ['Márton'], 12: ['Jónás', 'Renátó'], 13: ['Szilvia'], 14: ['Aliz'], 15: ['Albert', 'Lipót'],
+                16: ['Ödön'], 17: ['Hortenzia', 'Gergő'], 18: ['Jenő'], 19: ['Erzsébet'], 20: ['Jolán'],
+                21: ['Olivér'], 22: ['Cecília'], 23: ['Kelemen', 'Klementina'], 24: ['Emma'], 25: ['Katalin'],
+                26: ['Virág'], 27: ['Virgil'], 28: ['Stefánia'], 29: ['Taksony'], 30: ['András', 'Andor']
+            },
+            12: { 
+                1: ['Elza'], 2: ['Melinda', 'Vivien'], 3: ['Ferenc', 'Olívia'], 4: ['Borbála', 'Barbara'], 5: ['Vilma'],
+                6: ['Miklós'], 7: ['Ambrus'], 8: ['Mária'], 9: ['Natália'], 10: ['Judit'],
+                11: ['Árpád'], 12: ['Gabriella'], 13: ['Luca', 'Otília'], 14: ['Szilárda'], 15: ['Valér'],
+                16: ['Etelka', 'Aletta'], 17: ['Lázár', 'Olimpia'], 18: ['Auguszta'], 19: ['Viola'], 20: ['Teofil'],
+                21: ['Tamás'], 22: ['Zéno'], 23: ['Viktória'], 24: ['Ádám', 'Éva'], 25: ['Eugénia'],
+                26: ['István'], 27: ['János'], 28: ['Kamilla'], 29: ['Tamás', 'Tamara'], 30: ['Dávid'],
+                31: ['Szilveszter']
+            }
+        };
+
+        
+        let rendelesek = [
+            { terulet: 15, tipus: 'normal' },
+            { terulet: 32, tipus: 'premium' },
+            { terulet: 8, tipus: 'normal' },
+            { terulet: 45, tipus: 'delux' }
+        ];
+
+        
+        function szamitasAr(terulet, tipus, nev) {
+            let egysegar = 0;
+            
+            
+            if (tipus === 'normal') {
+                egysegar = 2199;
+            } else if (tipus === 'premium') {
+                egysegar = 2699;
+            } else if (tipus === 'delux') {
+                egysegar = 3199;
+            }
+
+            
+            let alapar = terulet * egysegar;
+            
+            let kedvezmeny = 0;
+            let kedvezmenyOka = '';
+            
+            
+            const ma = new Date();
+            const honap = ma.getMonth() + 1; 
+            const nap = ma.getDate();
+            
+           
+            const maiNevnapok = nevnapok[honap] && nevnapok[honap][nap] ? nevnapok[honap][nap] : [];
+            
+            
+            const nevNormalizalt = nev.toLowerCase().trim();
+            
+            
+            let vanNevnapja = false;
+            for (let i = 0; i < maiNevnapok.length; i++) {
+                if (maiNevnapok[i].toLowerCase() === nevNormalizalt) {
+                    vanNevnapja = true;
+                    break;
+                }
+            }
+            
+            
+            if (terulet > 25 || vanNevnapja) {
+                
+                kedvezmeny = alapar * 0.10;
+                
+                
+                if (terulet > 25 && vanNevnapja) {
+                    kedvezmenyOka = '15% - Névnap + 25m² felett';
+                    kedvezmeny = alapar * 0.15;
+                } else if (terulet > 25) {
+                    kedvezmenyOka = '10% - 25m² felett';
+                } else if (vanNevnapja) {
+                    kedvezmenyOka = '10% - Névnap';
+                }
+            }
+
+            
+            let vegosszeg = alapar - kedvezmeny;
+            
+
+            
+            return {
+                egysegar: egysegar,
+                alapar: alapar,
+                kedvezmeny: kedvezmeny,
+                kedvezmenyOka: kedvezmenyOka,
+                vegosszeg: Math.round(vegosszeg)
+            };
+        }
+
+        
+        function szamolArat() {
+            const teruletInput = document.getElementById('terulet-input');
+            const terulet = parseFloat(teruletInput.value);
+
+            
+            if (!terulet || terulet < 1 || terulet > 500) {
+                alert('Kérem adjon meg egy érvényes területet 1 és 500 m² között!');
+                return;
+            }
+
+            const nevInput = document.getElementById('nev-input');
+            const nev = nevInput.value.trim();
+            
+            
+
+            
+            const tipusRadio = document.querySelector('input[name="tipus"]:checked');
+            const tipus = tipusRadio.value;
+
+            const eredmeny = szamitasAr(terulet, tipus, nev);
+
+            
+            let tipusNev = '';
+            if (tipus === 'normal') tipusNev = 'Normál';
+            else if (tipus === 'premium') tipusNev = 'Prémium';
+            else if (tipus === 'delux') tipusNev = 'Delux';
+
+            
+            document.getElementById('eredmeny-terulet').textContent = terulet + ' m²';
+            document.getElementById('eredmeny-tipus').textContent = tipusNev;
+            document.getElementById('eredmeny-egysegar').textContent = eredmeny.egysegar.toLocaleString() + ' Ft/m²';
+            document.getElementById('eredmeny-alapar').textContent = eredmeny.alapar.toLocaleString() + ' Ft';
+            
+            if (eredmeny.kedvezmeny > 0) {
+                document.getElementById('kedvezmeny-sor').style.display = 'flex';
+                document.getElementById('kedvezmeny-szoveg').textContent = 'Kedvezmény (' + eredmeny.kedvezmenyOka + '):';
+                document.getElementById('eredmeny-kedvezmeny').textContent = '- ' + eredmeny.kedvezmeny.toLocaleString() + ' Ft';
+            } else {
+                document.getElementById('kedvezmeny-sor').style.display = 'none';
+            }
+
+            document.getElementById('eredmeny-vegosszeg').textContent = eredmeny.vegosszeg.toLocaleString() + ' Ft';
+            document.getElementById('eredmeny').classList.remove('hidden');
+
+            
+            rendelesek.push({ terulet: terulet, tipus: tipus });
+
+            
+            frissitMaxTerulet();
+        }
+
+        
+        function keresMaxTerulet() {
+            if (rendelesek.length === 0) {
+                return 0;
+            }
+
+            let maxTerulet = rendelesek[0].terulet;
+
+            
+            for (let i = 1; i < rendelesek.length; i++) {
+                
+                if (rendelesek[i].terulet > maxTerulet) {
+                    maxTerulet = rendelesek[i].terulet;
+                }
+            }
+
+            return maxTerulet;
+        }
+
+        
+        function frissitMaxTerulet() {
+            const max = keresMaxTerulet();
+            document.getElementById('max-terulet').textContent = max + ' m²';
+        }
+
+        
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        
+        window.addEventListener('load', function() {
+            frissitMaxTerulet();
+        });
+
+        
+        document.getElementById('terulet-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                szamolArat();
+            }
+        });
+
+        document.getElementById('nev-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                szamolArat();
+            }
+        });
+    </script>
+</body>
+</html>
