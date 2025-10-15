@@ -60,7 +60,8 @@ A weboldal elkészítéséhez a következő technológiákat használtam/haszná
 - Input AI-hoz
     - Csak azt a reszt kene megvaltoztasd ahol a kalkulator kalkulal: Azt valtoztasd hogy kedvezmeny akkor legyen ha tobb mint 25m2 vagy a jelenlegi nevnap egyenlo a megrendelo nevevel (kerje be a felhasznalotol hogy nevnapja van e es ha igen akkor legyen kedvezmeny)
 - Output AI
-     ``` javascript
+     
+``` javascript
     let vanNevnapja = false;
         for (let i = 0; i < maiNevnapok.length; i++) {
             if (maiNevnapok[i].toLowerCase() === nevNormalizalt) {
@@ -83,7 +84,7 @@ A weboldal elkészítéséhez a következő technológiákat használtam/haszná
                   kedvezmenyOka = '10% - Névnap';
            }
             }
-        ```
+```
 
 ---
 
